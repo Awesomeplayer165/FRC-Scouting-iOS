@@ -23,7 +23,7 @@ struct AutoView: View {
     
     private let rectangleCornerRadius: CGFloat = 10
     
-    @State private var timer: Timer?
+    @State private var timer = Timer.publish(every: 16.0, on: .current, in: .common).autoconnect()
     @State private var isFirstTime = true
     
     var body: some View {
@@ -114,24 +114,13 @@ struct AutoView: View {
             })
             .buttonStyle(.borderedProminent)
         }
-        .onDisappear {
-            timer?.invalidate()
+        .onReceive(timer) { timer in
+            heavyImpactGenerator .impactOccurred()
+            isTeleopViewPresented.toggle()
+            self.timer.upstream.connect().cancel()
         }
         .onAppear {
             AppDelegate.setOrientationLock(.landscapeLeft, orientationMask: .landscape)
-            
-            Timer.scheduledTimer(withTimeInterval: 16, repeats: false) { timer in
-                self.timer = timer
-                
-                if isAutoViewPresented || isGameReadyViewPresented { return }
-                
-                if !isTeleopViewPresented {
-                    heavyImpactGenerator .impactOccurred()
-                    isTeleopViewPresented.toggle()
-                }
-                
-                timer.invalidate()
-            }
         }
         .navigationBarBackButtonHidden()
         .navigationBarTitle("Team: \(MatchDetails.shared.teamNumber)")
