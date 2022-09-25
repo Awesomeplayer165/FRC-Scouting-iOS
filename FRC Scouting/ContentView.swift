@@ -41,6 +41,20 @@ class MatchDetails {
         
         notes = ""
     }
+    
+    static public func exampleData() {
+        shared.matchNumber = "23"
+        shared.teamNumber  = "8033"
+        shared.name        = "Jacob Trentini"
+        
+        shared.autoSuccess = 3
+        shared.autoFailure = 2
+        
+        shared.teleopSuccess = 21
+        shared.teleopFailure = 2
+        
+        shared.notes = ""
+    }
 }
 
 extension String {
@@ -67,23 +81,22 @@ struct ContentView: View {
                         TextField("Match #", text: $matchNumber)
                         TextField("Team #",  text: $teamNumber)
                         TextField("Name",    text: $name)
-                    } header: {
-                        Text("Pre-Match")
                     }
                     
-                    NavigationLink(destination: GameReadyView(), isActive: $isGameReadyViewPresented) {
-                        Button(action: {
-                            MatchDetails.shared.matchNumber = matchNumber
-                            MatchDetails.shared.teamNumber  = teamNumber
-                            MatchDetails.shared.name        = name
+                    Button(action: {
+                        MatchDetails.shared.matchNumber = matchNumber
+                        MatchDetails.shared.teamNumber  = teamNumber
+                        MatchDetails.shared.name        = name
+                        
+                        MatchDetails.shared.isMetaMatchDetailsValid() ? isGameReadyViewPresented.toggle() : isErrorAlertShown.toggle()
+                    }) {
+                        HStack {
+                            Spacer()
+                            Text("Start")
+                            Spacer()
                             
-                            MatchDetails.shared.isMetaMatchDetailsValid() ? isGameReadyViewPresented.toggle() : isErrorAlertShown.toggle()
-                        }) {
-                            HStack {
-                                Spacer()
-                                Text("Start")
-                                Spacer()
-                            }
+                            NavigationLink(destination: GameReadyView(), isActive: $isGameReadyViewPresented) { EmptyView() }
+                                .frame(width: 0, height: 0)
                         }
                     }
                     .alert("Error in Match Meta", isPresented: $isErrorAlertShown, actions: {}, message: { Text("Error in Match Meta Details. Check if values are empty?") })
@@ -97,6 +110,7 @@ struct ContentView: View {
                 }
             }
         }
+        .navigationTitle("Pre-Match")
         .onAppear {
             isGameReadyViewPresented = false
             

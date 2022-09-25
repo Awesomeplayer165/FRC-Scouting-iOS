@@ -17,7 +17,7 @@
 		1D8597FE28DF8A24007D8751 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D8597FD28DF8A24007D8751 /* ContentView.swift */; };
 		1D85980028DF8D85007D8751 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D8597FF28DF8D85007D8751 /* AppDelegate.swift */; };
 		1D85980528DF8E62007D8751 /* TeleopView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D85980428DF8E62007D8751 /* TeleopView.swift */; };
-		1D85980728DF8F7F007D8751 /* GameFinishedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D85980628DF8F7F007D8751 /* GameFinishedView.swift */; };
+		1D85980728DF8F7F007D8751 /* PostMatchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D85980628DF8F7F007D8751 /* PostMatchView.swift */; };
 		1D85980928DF9340007D8751 /* ClimberPosition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D85980828DF9340007D8751 /* ClimberPosition.swift */; };
 /* End PBXBuildFile section */
 
@@ -32,8 +32,9 @@
 		1D8597FD28DF8A24007D8751 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		1D8597FF28DF8D85007D8751 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		1D85980428DF8E62007D8751 /* TeleopView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeleopView.swift; sourceTree = "<group>"; };
-		1D85980628DF8F7F007D8751 /* GameFinishedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameFinishedView.swift; sourceTree = "<group>"; };
+		1D85980628DF8F7F007D8751 /* PostMatchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostMatchView.swift; sourceTree = "<group>"; };
 		1D85980828DF9340007D8751 /* ClimberPosition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClimberPosition.swift; sourceTree = "<group>"; };
+		1DFF9D5D28E0AAF300CF1DCB /* FRC-Scouting-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "FRC-Scouting-Info.plist"; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -67,12 +68,13 @@
 		1D8597EC28DF865B007D8751 /* FRC Scouting */ = {
 			isa = PBXGroup;
 			children = (
+				1DFF9D5D28E0AAF300CF1DCB /* FRC-Scouting-Info.plist */,
 				1D85980128DF8E37007D8751 /* Application */,
 				1D8597FD28DF8A24007D8751 /* ContentView.swift */,
 				1D2ADD4328DFF52B00C4ACD7 /* GameReadyView.swift */,
 				1D8597EF28DF865B007D8751 /* AutoView.swift */,
 				1D85980428DF8E62007D8751 /* TeleopView.swift */,
-				1D85980628DF8F7F007D8751 /* GameFinishedView.swift */,
+				1D85980628DF8F7F007D8751 /* PostMatchView.swift */,
 				1D85980828DF9340007D8751 /* ClimberPosition.swift */,
 				1D2ADD4828E005FD00C4ACD7 /* SFWebViewRepresentable.swift */,
 				1D8597F128DF865D007D8751 /* Assets.xcassets */,
@@ -176,7 +178,7 @@
 			files = (
 				1D2ADD4428DFF52B00C4ACD7 /* GameReadyView.swift in Sources */,
 				1D2ADD4928E005FD00C4ACD7 /* SFWebViewRepresentable.swift in Sources */,
-				1D85980728DF8F7F007D8751 /* GameFinishedView.swift in Sources */,
+				1D85980728DF8F7F007D8751 /* PostMatchView.swift in Sources */,
 				1D85980028DF8D85007D8751 /* AppDelegate.swift in Sources */,
 				1D8597F028DF865B007D8751 /* AutoView.swift in Sources */,
 				1D8597EE28DF865B007D8751 /* FRC_ScoutingApp.swift in Sources */,
@@ -309,11 +311,12 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_ASSET_PATHS = "\"FRC Scouting/Preview Content\"";
 				DEVELOPMENT_TEAM = B4MZRFLMLS;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "FRC-Scouting-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = Scouting;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -325,7 +328,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2;
+				MARKETING_VERSION = 1.3;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.jacobtrentini.FRC-Scouting";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -343,11 +346,12 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_ASSET_PATHS = "\"FRC Scouting/Preview Content\"";
 				DEVELOPMENT_TEAM = B4MZRFLMLS;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "FRC-Scouting-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = Scouting;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -359,7 +363,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2;
+				MARKETING_VERSION = 1.3;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.jacobtrentini.FRC-Scouting";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";

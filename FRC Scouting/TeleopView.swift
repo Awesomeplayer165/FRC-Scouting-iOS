@@ -92,31 +92,28 @@ struct TeleopView: View {
             }
             .ignoresSafeArea()
             
-            NavigationLink(destination: GameFinishedView(), isActive: $isFinishViewPresented) {
-                Button(action: {
-                    MatchDetails.shared.teleopSuccess = teleopSuccess
-                    MatchDetails.shared.teleopFailure = teleopFailure
-                    
-                    isFinishViewPresented.toggle()
-                }, label: {
-                    HStack {
-                        Spacer()
-                        Text("Finish")
-                        Spacer()
-                    }
-                })
-                .buttonStyle(.borderedProminent)
-            }
+            Button(action: {
+                MatchDetails.shared.teleopSuccess = teleopSuccess
+                MatchDetails.shared.teleopFailure = teleopFailure
+                
+                isFinishViewPresented.toggle()
+            }, label: {
+                HStack {
+                    Spacer()
+                    Text("Finish")
+                    Spacer()
+                }
+            })
+            .buttonStyle(.borderedProminent)
+            
+            NavigationLink(destination: PostMatchView(), isActive: $isFinishViewPresented) { EmptyView() }
+                .frame(width: 0, height: 0)
         }
         .onAppear {
             AppDelegate.setOrientationLock(.landscapeLeft, orientationMask: .landscape)
         }
+        .navigationBarBackButtonHidden()
         .navigationBarTitle("Team: \(MatchDetails.shared.teamNumber)")
-        .toolbar {
-            ToolbarItem(placement: .automatic) {
-                CloseButtonView(presentationMode: presentationMode)
-            }
-        }
         .navigationViewStyle(.stack)
     }
 }

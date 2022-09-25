@@ -12,6 +12,8 @@ struct AutoView: View {
     @State private var autoFailure = 0
     
     @State private var isTeleopViewPresented = false
+    @AppStorage("isGameReadyViewPresented", store: .standard) private var isGameReadyViewPresented = false
+    @AppStorage("isAutoViewPresented", store: .standard) private var isAutoViewPresented = false
     
     @Environment(\.presentationMode) var presentationMode
     
@@ -22,6 +24,7 @@ struct AutoView: View {
     private let rectangleCornerRadius: CGFloat = 10
     
     @State private var timer: Timer?
+    @State private var isFirstTime = true
     
     var body: some View {
         VStack {
@@ -94,21 +97,22 @@ struct AutoView: View {
             }
             .ignoresSafeArea()
             
-            NavigationLink(destination: TeleopView(), isActive: $isTeleopViewPresented) {
-                Button(action: {
-                    MatchDetails.shared.autoSuccess = autoSuccess
-                    MatchDetails.shared.autoFailure = autoFailure
-                    
-                    isTeleopViewPresented.toggle()
-                }, label: {
-                    HStack {
-                        Spacer()
-                        Text("Next - to Teleop")
-                        Spacer()
-                    }
-                })
-                .buttonStyle(.borderedProminent)
-            }
+            NavigationLink(destination: TeleopView(), isActive: $isTeleopViewPresented) { EmptyView() }
+                .frame(width: 0, height: 0)
+            
+            Button(action: {
+                MatchDetails.shared.autoSuccess = autoSuccess
+                MatchDetails.shared.autoFailure = autoFailure
+                
+                isTeleopViewPresented.toggle()
+            }, label: {
+                HStack {
+                    Spacer()
+                    Text("Next - to Teleop")
+                    Spacer()
+                }
+            })
+            .buttonStyle(.borderedProminent)
         }
         .onDisappear {
             timer?.invalidate()
@@ -119,6 +123,8 @@ struct AutoView: View {
             Timer.scheduledTimer(withTimeInterval: 16, repeats: false) { timer in
                 self.timer = timer
                 
+                if isAutoViewPresented || isGameReadyViewPresented { return }
+                
                 if !isTeleopViewPresented {
                     heavyImpactGenerator .impactOccurred()
                     isTeleopViewPresented.toggle()
@@ -127,13 +133,10 @@ struct AutoView: View {
                 timer.invalidate()
             }
         }
+        .navigationBarBackButtonHidden()
         .navigationBarTitle("Team: \(MatchDetails.shared.teamNumber)")
-        .toolbar {
-            ToolbarItem(placement: .automatic) {
-                CloseButtonView(presentationMode: presentationMode)
-            }
-        }
         .navigationViewStyle(.stack)
+        
     }
 }
 
@@ -149,10 +152,15 @@ struct AutoView_Previews: PreviewProvider {
 struct CloseButtonView: View {
     
     var presentationMode: Binding<PresentationMode>
+    var action: (() -> Void)? = nil
     
     var body: some View {
         Button {
-            presentationMode.wrappedValue.dismiss()
+            if let action = action {
+                action()
+            } else {
+                presentationMode.wrappedValue.dismiss()
+            }
         } label: {
             Image(systemName: "xmark.circle.fill")
                 .resizable()

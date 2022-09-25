@@ -1,20 +1,21 @@
 //
-//  GameFinishedView.swift
+//  PostMatchView.swift
 //  FRC Scouting
 //
 //  Created by Jacob Trentini on 9/24/22.
 //
 
 import SwiftUI
+import UniformTypeIdentifiers
 
-struct GameFinishedView: View {
+struct PostMatchView: View {
     @State private var selectedClimberPosition = ClimberPosition.noClimb
     @State private var notes = ""
     
     @State private var isSafariViewControllerPresented = false
     
-    @AppStorage("isAutoViewPresented",      store: .standard) private var isAutoViewPresented = false
     @AppStorage("isGameReadyViewPresented", store: .standard) private var isGameReadyViewPresented = false
+    @AppStorage("isAutoViewPresented", store: .standard) private var isAutoViewPresented = false
     
     @Environment(\.presentationMode) var presentationMode
     
@@ -31,17 +32,53 @@ struct GameFinishedView: View {
             }
             
             Section {
-                Text("Match Number: \(MatchDetails.shared.matchNumber)")
-                Text("Team Number: \(MatchDetails.shared.teamNumber)")
-                Text("Name: \(MatchDetails.shared.name)")
+                HStack {
+                    Text("Match Number")
+                    Spacer()
+                    Text(MatchDetails.shared.matchNumber)
+                    ClipboardButton(textToCopy: MatchDetails.shared.matchNumber)
+                }
+                HStack {
+                    Text("Team Number \(MatchDetails.shared.teamNumber)")
+                    Spacer()
+                    Text(MatchDetails.shared.teamNumber)
+                    ClipboardButton(textToCopy: MatchDetails.shared.teamNumber)
+                }
                 
-                Text("Auto Success: \(MatchDetails.shared.autoSuccess)")
-                Text("Auto Failure: \(MatchDetails.shared.autoFailure)")
+                HStack {
+                    Text("Name")
+                    Spacer()
+                    Text(MatchDetails.shared.name)
+                    ClipboardButton(textToCopy: MatchDetails.shared.name)
+                }
+                    
+                HStack {
+                    Text("Auto Success")
+                    Spacer()
+                    Text("\(MatchDetails.shared.autoSuccess)")
+                    ClipboardButton(textToCopy: "\(MatchDetails.shared.autoSuccess)")
+                }
                 
-                Text("Teleop Success: \(MatchDetails.shared.teleopSuccess)")
-                Text("Teleop Failure: \(MatchDetails.shared.teleopFailure)")
-            } header: {
-                Text("Post-Match")
+                HStack {
+                    Text("Auto Failure")
+                    Spacer()
+                    Text("\(MatchDetails.shared.autoFailure)")
+                    ClipboardButton(textToCopy: "\(MatchDetails.shared.autoFailure)")
+                }
+                    
+                HStack {
+                    Text("Teleop Success")
+                    Spacer()
+                    Text("\(MatchDetails.shared.teleopSuccess)")
+                    ClipboardButton(textToCopy: "\(MatchDetails.shared.matchNumber)")
+                }
+                
+                HStack {
+                    Text("Teleop Failure")
+                    Spacer()
+                    Text("\(MatchDetails.shared.teleopFailure)")
+                    ClipboardButton(textToCopy: "\(MatchDetails.shared.teleopFailure)")
+                }
             }
             
             Section {
@@ -57,6 +94,7 @@ struct GameFinishedView: View {
             }
             .sheet(isPresented: $isSafariViewControllerPresented, onDismiss: {
                 isGameReadyViewPresented.toggle()
+                isAutoViewPresented.toggle()
             }) {
                 SafariView(url: createURL(), safariViewControllerDidDismiss: $isSafariViewControllerPresented)
             }
@@ -65,9 +103,11 @@ struct GameFinishedView: View {
                 AppDelegate.setOrientationLock(.portrait, orientationMask: .all)
             }
         }
+        .navigationBarBackButtonHidden()
+        .navigationTitle("Post-Match")
         .toolbar {
             ToolbarItem {
-                CloseButtonView(presentationMode: presentationMode)
+                CloseButtonView(presentationMode: presentationMode, action: { isGameReadyViewPresented.toggle() })
             }
         }
     }
@@ -79,8 +119,21 @@ struct GameFinishedView: View {
     }
 }
 
-struct GameFinishedView_Previews: PreviewProvider {
+struct PostMatchView_Previews: PreviewProvider {
     static var previews: some View {
-        GameFinishedView()
+        PostMatchView()
+            .onAppear {
+                MatchDetails.exampleData()
+            }
+    }
+}
+
+struct ClipboardButton: View {
+    var textToCopy: String
+    
+    var body: some View {
+        Button(action: { UIPasteboard.general.setValue(textToCopy, forPasteboardType: UTType.plainText.identifier) }) {
+            Image(systemName: "doc.on.clipboard")
+        }
     }
 }

@@ -35,6 +35,7 @@ struct GameReadyView: View {
                 .multilineTextAlignment(.center)
         }
         .onAppear {
+            isAutoViewPresented = false
             AppDelegate.setOrientationLock(.landscapeLeft, orientationMask: .landscape)
         }
 //        .onDisappear {
