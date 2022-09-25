@@ -78,7 +78,13 @@ struct ContentView: View {
             VStack {
                 Form {
                     Section {
-                        TextField("Match #", text: $matchNumber)
+                        HStack {
+                            TextField("Match #", text: $matchNumber)
+                            Spacer()
+                            Button("+1") {
+                                matchNumber = "\(Int(matchNumber) ?? 0 + 1)"
+                            }
+                        }
                         TextField("Team #",  text: $teamNumber)
                         TextField("Name",    text: $name)
                     }
@@ -104,6 +110,9 @@ struct ContentView: View {
                     Section {
                         Button("Clear Match Data") {
                             MatchDetails.shared.clear()
+                            
+                            matchNumber = ""
+                            teamNumber  = ""
                         }
                         Link("Open Empty Google Form Link", destination: URL(string: "https://docs.google.com/forms/d/e/1FAIpQLSfZSne2CzACrxsFgdT-37J6PylON7bIMe0mcACFKxDr9yv56A/viewform")!)
                     } header: { Text("Debug") }

@@ -101,9 +101,7 @@ struct AutoView: View {
                 .frame(width: 0, height: 0)
             
             Button(action: {
-                MatchDetails.shared.autoSuccess = autoSuccess
-                MatchDetails.shared.autoFailure = autoFailure
-                
+                saveAndAdvance()
                 isTeleopViewPresented.toggle()
             }, label: {
                 HStack {
@@ -114,10 +112,8 @@ struct AutoView: View {
             })
             .buttonStyle(.borderedProminent)
         }
-        .onReceive(timer) { timer in
-            heavyImpactGenerator .impactOccurred()
-            isTeleopViewPresented.toggle()
-            self.timer.upstream.connect().cancel()
+        .onReceive(timer) { _ in
+            saveAndAdvance()
         }
         .onAppear {
             AppDelegate.setOrientationLock(.landscapeLeft, orientationMask: .landscape)
@@ -126,6 +122,16 @@ struct AutoView: View {
         .navigationBarTitle("Team: \(MatchDetails.shared.teamNumber)")
         .navigationViewStyle(.stack)
         
+    }
+    
+    func saveAndAdvance() {
+        MatchDetails.shared.autoSuccess = autoSuccess
+        MatchDetails.shared.autoFailure = autoFailure
+        
+        heavyImpactGenerator .impactOccurred()
+        isTeleopViewPresented.toggle()
+        
+        self.timer.upstream.connect().cancel()
     }
 }
 
