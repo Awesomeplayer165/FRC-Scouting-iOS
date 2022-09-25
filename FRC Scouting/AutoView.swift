@@ -21,78 +21,80 @@ struct AutoView: View {
     
     private let rectangleCornerRadius: CGFloat = 10
     
+    @State private var timer: Timer?
+    
     var body: some View {
-        NavigationView {
-            VStack {
-                HStack {
-                    ZStack {
-                        Rectangle()
-                            .foregroundColor(.red)
-                            .cornerRadius(rectangleCornerRadius)
-                        VStack {
-                            Spacer()
-                            
-                            Text("Auto Miss")
-                                .font(.largeTitle)
-                            Text("\(autoFailure)")
-                                .foregroundStyle(.secondary)
-                                .font(.system(size: 50))
-                            
-                            Spacer()
-                            
-                            Button("Subtract") {
-                                if autoFailure > 0 {
-                                    autoFailure -= 1
-                                    notificationGenerator.notificationOccurred(.warning)
-                                } else {
-                                    notificationGenerator.notificationOccurred(.error)
-                                }
+        VStack {
+            HStack {
+                ZStack {
+                    Rectangle()
+                        .foregroundColor(.red)
+                        .cornerRadius(rectangleCornerRadius)
+                    VStack {
+                        Spacer()
+                        
+                        Text("Auto Miss")
+                            .font(.largeTitle)
+                        Text("\(autoFailure)")
+                            .foregroundStyle(.secondary)
+                            .font(.system(size: 50))
+                        
+                        Spacer()
+                        
+                        Button("Subtract") {
+                            if autoFailure > 0 {
+                                autoFailure -= 1
+                                notificationGenerator.notificationOccurred(.warning)
+                            } else {
+                                notificationGenerator.notificationOccurred(.error)
                             }
-                            .buttonStyle(.bordered)
-                            .padding()
                         }
-                        .foregroundColor(.white)
+                        .buttonStyle(.bordered)
+                        .padding()
                     }
-                    .onTapGesture {
-                        autoFailure += 1
-                        mediumImpactGenerator.impactOccurred()
-                    }
-                    
-                    ZStack {
-                        Rectangle()
-                            .foregroundColor(.green)
-                            .cornerRadius(rectangleCornerRadius)
-                        VStack {
-                            Spacer()
-                            
-                            Text("Auto Success")
-                                .font(.largeTitle)
-                            Text("\(autoSuccess)")
-                                .foregroundStyle(.secondary)
-                                .font(.system(size: 50))
-                            
-                            Spacer()
-                            
-                            Button("Subtract") {
-                                if autoSuccess > 0 {
-                                    autoSuccess -= 1
-                                    notificationGenerator.notificationOccurred(.warning)
-                                } else {
-                                    notificationGenerator.notificationOccurred(.error)
-                                }
-                            }
-                            .buttonStyle(.bordered)
-                            .padding()
-                        }
-                        .foregroundColor(.white)
-                    }
-                    .onTapGesture {
-                        autoSuccess += 1
-                        mediumImpactGenerator.impactOccurred()
-                    }
+                    .foregroundColor(.white)
                 }
-                .ignoresSafeArea()
+                .onTapGesture {
+                    autoFailure += 1
+                    mediumImpactGenerator.impactOccurred()
+                }
                 
+                ZStack {
+                    Rectangle()
+                        .foregroundColor(.green)
+                        .cornerRadius(rectangleCornerRadius)
+                    VStack {
+                        Spacer()
+                        
+                        Text("Auto Success")
+                            .font(.largeTitle)
+                        Text("\(autoSuccess)")
+                            .foregroundStyle(.secondary)
+                            .font(.system(size: 50))
+                        
+                        Spacer()
+                        
+                        Button("Subtract") {
+                            if autoSuccess > 0 {
+                                autoSuccess -= 1
+                                notificationGenerator.notificationOccurred(.warning)
+                            } else {
+                                notificationGenerator.notificationOccurred(.error)
+                            }
+                        }
+                        .buttonStyle(.bordered)
+                        .padding()
+                    }
+                    .foregroundColor(.white)
+                }
+                .onTapGesture {
+                    autoSuccess += 1
+                    mediumImpactGenerator.impactOccurred()
+                }
+            }
+            .ignoresSafeArea()
+            
+            NavigationLink(destination: TeleopView(), isActive: $isTeleopViewPresented) {
                 Button(action: {
                     MatchDetails.shared.autoSuccess = autoSuccess
                     MatchDetails.shared.autoFailure = autoFailure
@@ -106,25 +108,29 @@ struct AutoView: View {
                     }
                 })
                 .buttonStyle(.borderedProminent)
-                .sheet(isPresented: $isTeleopViewPresented) {
-                    TeleopView()
-                }
             }
-            .onDisappear {
-                AppDelegate.setOrientationLock(.portrait, orientationMask: .portrait)
-            }
-            .onAppear {
-                AppDelegate.setOrientationLock(.landscapeLeft, orientationMask: .landscape)
-                DispatchQueue.main.asyncAfter(deadline: .now() + 16) {
-                    heavyImpactGenerator.impactOccurred()
+        }
+        .onDisappear {
+            timer?.invalidate()
+        }
+        .onAppear {
+            AppDelegate.setOrientationLock(.landscapeLeft, orientationMask: .landscape)
+            
+            Timer.scheduledTimer(withTimeInterval: 16, repeats: false) { timer in
+                self.timer = timer
+                
+                if !isTeleopViewPresented {
+                    heavyImpactGenerator .impactOccurred()
                     isTeleopViewPresented.toggle()
                 }
+                
+                timer.invalidate()
             }
-            .navigationBarTitle("Team: \(MatchDetails.shared.teamNumber)")
-            .toolbar {
-                ToolbarItem(placement: .automatic) {
-                    CloseButtonView(presentationMode: presentationMode)
-                }
+        }
+        .navigationBarTitle("Team: \(MatchDetails.shared.teamNumber)")
+        .toolbar {
+            ToolbarItem(placement: .automatic) {
+                CloseButtonView(presentationMode: presentationMode)
             }
         }
         .navigationViewStyle(.stack)

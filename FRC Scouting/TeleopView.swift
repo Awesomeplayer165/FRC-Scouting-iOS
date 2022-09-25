@@ -22,77 +22,77 @@ struct TeleopView: View {
     private let rectangleCornerRadius: CGFloat = 10
     
     var body: some View {
-        NavigationView {
-            VStack {
-                HStack {
-                    ZStack {
-                        Rectangle()
-                            .foregroundColor(.red)
-                            .cornerRadius(rectangleCornerRadius)
-                        VStack {
-                            Spacer()
-                            
-                            Text("Teleop Miss")
-                                .font(.largeTitle)
-                            Text("\(teleopFailure)")
-                                .foregroundStyle(.secondary)
-                                .font(.system(size: 50))
-                            
-                            Spacer()
-                            
-                            Button("Subtract") {
-                                if teleopFailure > 0 {
-                                    teleopFailure -= 1
-                                    notificationGenerator.notificationOccurred(.warning)
-                                } else {
-                                    notificationGenerator.notificationOccurred(.error)
-                                }
+        VStack {
+            HStack {
+                ZStack {
+                    Rectangle()
+                        .foregroundColor(.red)
+                        .cornerRadius(rectangleCornerRadius)
+                    VStack {
+                        Spacer()
+                        
+                        Text("Teleop Miss")
+                            .font(.largeTitle)
+                        Text("\(teleopFailure)")
+                            .foregroundStyle(.secondary)
+                            .font(.system(size: 50))
+                        
+                        Spacer()
+                        
+                        Button("Subtract") {
+                            if teleopFailure > 0 {
+                                teleopFailure -= 1
+                                notificationGenerator.notificationOccurred(.warning)
+                            } else {
+                                notificationGenerator.notificationOccurred(.error)
                             }
-                            .buttonStyle(.bordered)
-                            .padding()
                         }
-                        .foregroundColor(.white)
+                        .buttonStyle(.bordered)
+                        .padding()
                     }
-                    .onTapGesture {
-                        teleopFailure += 1
-                        mediumImpactGenerator.impactOccurred()
-                    }
-                    
-                    ZStack {
-                        Rectangle()
-                            .foregroundColor(.green)
-                            .cornerRadius(rectangleCornerRadius)
-                        VStack {
-                            Spacer()
-                            
-                            Text("Teleop Success")
-                                .font(.largeTitle)
-                            Text("\(teleopSuccess)")
-                                .foregroundStyle(.secondary)
-                                .font(.system(size: 50))
-                            
-                            Spacer()
-                            
-                            Button("Subtract") {
-                                if teleopSuccess > 0 {
-                                    teleopSuccess -= 1
-                                    notificationGenerator.notificationOccurred(.warning)
-                                } else {
-                                    notificationGenerator.notificationOccurred(.error)
-                                }
-                            }
-                            .buttonStyle(.bordered)
-                            .padding()
-                        }
-                        .foregroundColor(.white)
-                    }
-                    .onTapGesture {
-                        teleopSuccess += 1
-                        mediumImpactGenerator.impactOccurred()
-                    }
+                    .foregroundColor(.white)
                 }
-                .ignoresSafeArea()
+                .onTapGesture {
+                    teleopFailure += 1
+                    mediumImpactGenerator.impactOccurred()
+                }
                 
+                ZStack {
+                    Rectangle()
+                        .foregroundColor(.green)
+                        .cornerRadius(rectangleCornerRadius)
+                    VStack {
+                        Spacer()
+                        
+                        Text("Teleop Success")
+                            .font(.largeTitle)
+                        Text("\(teleopSuccess)")
+                            .foregroundStyle(.secondary)
+                            .font(.system(size: 50))
+                        
+                        Spacer()
+                        
+                        Button("Subtract") {
+                            if teleopSuccess > 0 {
+                                teleopSuccess -= 1
+                                notificationGenerator.notificationOccurred(.warning)
+                            } else {
+                                notificationGenerator.notificationOccurred(.error)
+                            }
+                        }
+                        .buttonStyle(.bordered)
+                        .padding()
+                    }
+                    .foregroundColor(.white)
+                }
+                .onTapGesture {
+                    teleopSuccess += 1
+                    mediumImpactGenerator.impactOccurred()
+                }
+            }
+            .ignoresSafeArea()
+            
+            NavigationLink(destination: GameFinishedView(), isActive: $isFinishViewPresented) {
                 Button(action: {
                     MatchDetails.shared.teleopSuccess = teleopSuccess
                     MatchDetails.shared.teleopFailure = teleopFailure
@@ -106,18 +106,15 @@ struct TeleopView: View {
                     }
                 })
                 .buttonStyle(.borderedProminent)
-                .sheet(isPresented: $isFinishViewPresented) {
-                    FinishedView()
-                }
             }
-            .onAppear {
-                AppDelegate.setOrientationLock(.landscapeLeft, orientationMask: .landscape)
-            }
-            .navigationBarTitle("Team: \(MatchDetails.shared.teamNumber)")
-            .toolbar {
-                ToolbarItem(placement: .automatic) {
-                    CloseButtonView(presentationMode: presentationMode)
-                }
+        }
+        .onAppear {
+            AppDelegate.setOrientationLock(.landscapeLeft, orientationMask: .landscape)
+        }
+        .navigationBarTitle("Team: \(MatchDetails.shared.teamNumber)")
+        .toolbar {
+            ToolbarItem(placement: .automatic) {
+                CloseButtonView(presentationMode: presentationMode)
             }
         }
         .navigationViewStyle(.stack)
