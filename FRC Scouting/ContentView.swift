@@ -87,11 +87,21 @@ struct ContentView: View {
                         }
                     }
                     .alert("Error in Match Meta", isPresented: $isErrorAlertShown, actions: {}, message: { Text("Error in Match Meta Details. Check if values are empty?") })
+                    
+                    Section {
+                        Button("Clear Match Data") {
+                            MatchDetails.shared.clear()
+                        }
+                        Link("Open Empty Google Form Link", destination: URL(string: "https://docs.google.com/forms/d/e/1FAIpQLSfZSne2CzACrxsFgdT-37J6PylON7bIMe0mcACFKxDr9yv56A/viewform")!)
+                    } header: { Text("Debug") }
                 }
             }
         }
         .onAppear {
             isGameReadyViewPresented = false
+            
+            AppDelegate.orientationLock = .all
+            AppDelegate.setOrientationLock(.portrait, orientationMask: .all)
         }
     }
 }

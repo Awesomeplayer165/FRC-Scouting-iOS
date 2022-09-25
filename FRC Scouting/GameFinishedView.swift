@@ -60,6 +60,10 @@ struct GameFinishedView: View {
             }) {
                 SafariView(url: createURL(), safariViewControllerDidDismiss: $isSafariViewControllerPresented)
             }
+            .onAppear {
+                AppDelegate.orientationLock = .all
+                AppDelegate.setOrientationLock(.portrait, orientationMask: .all)
+            }
         }
         .toolbar {
             ToolbarItem {
@@ -70,6 +74,7 @@ struct GameFinishedView: View {
     
     func createURL() -> URL {
         MatchDetails.shared.notes = notes
+        
         return URL(string: "https://docs.google.com/forms/d/e/1FAIpQLSfZSne2CzACrxsFgdT-37J6PylON7bIMe0mcACFKxDr9yv56A/viewform?usp=pp_url&entry.2125038000=\(MatchDetails.shared.teamNumber.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed)!)&entry.685765925=\(MatchDetails.shared.matchNumber.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed)!)&entry.2138351230=\(MatchDetails.shared.name.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed)!)&entry.307342493=\(MatchDetails.shared.autoSuccess)&entry.325851281=\(MatchDetails.shared.autoFailure)&entry.585797499=\(MatchDetails.shared.teleopSuccess)&entry.1258824098=\(MatchDetails.shared.teleopFailure)&entry.1181924470=\(selectedClimberPosition.formDescription)&entry.1505471002=\(MatchDetails.shared.notes.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed)!)&usp=embed_facebook")!
     }
 }
