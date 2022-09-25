@@ -1,0 +1,14 @@
+{
+  "pins" : [
+    {
+      "identity" : "spindicator",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/ivanvorobei/SPIndicator",
+      "state" : {
+        "branch" : "main",
+        "revision" : "f9676f1d56239b1836587794923cb89cec8ae18a"
+      }
+    }
+  ],
+  "version" : 2
+}
