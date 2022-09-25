@@ -82,7 +82,7 @@ struct ContentView: View {
                             TextField("Match #", text: $matchNumber)
                             Spacer()
                             Button("+1") {
-                                matchNumber = "\(Int(matchNumber) ?? 0 + 1)"
+                                matchNumber = "\((Int(matchNumber) ?? 0) + 1)"
                             }
                         }
                         TextField("Team #",  text: $teamNumber)

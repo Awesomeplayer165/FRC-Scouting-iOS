@@ -17,7 +17,8 @@ struct TeleopView: View {
     @Environment(\.presentationMode) var presentationMode
     
     private let notificationGenerator = UINotificationFeedbackGenerator()
-    private var mediumImpactGenerator  = UIImpactFeedbackGenerator(style: .medium)
+    private var mediumImpactGenerator = UIImpactFeedbackGenerator(style: .medium)
+    private var heavyImpactGenerator  = UIImpactFeedbackGenerator(style: .heavy)
     
     private let rectangleCornerRadius: CGFloat = 10
     
@@ -97,6 +98,7 @@ struct TeleopView: View {
                 MatchDetails.shared.teleopFailure = teleopFailure
                 
                 isFinishViewPresented.toggle()
+                heavyImpactGenerator.impactOccurred()
             }, label: {
                 HStack {
                     Spacer()

@@ -102,7 +102,6 @@ struct AutoView: View {
             
             Button(action: {
                 saveAndAdvance()
-                isTeleopViewPresented.toggle()
             }, label: {
                 HStack {
                     Spacer()
