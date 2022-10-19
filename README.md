@@ -1,5 +1,5 @@
 # FRC-Scouting-iOS
-FRC Scouting for Native iOS
+FRC Scouting for Native iOS. This was specifically created for **Chezy Champs** 2022.
 
 An app that makes Scouting easier at FRC Tournaments. Designed by Jacob Trentini in FIRST 8033
 
