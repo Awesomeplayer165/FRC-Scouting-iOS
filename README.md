@@ -1,4 +1,4 @@
-# FRC Scouting iOS for Chezy Champs
+# FRC Scouting iOS for Chezy Champs 2022
 FRC Scouting for Native iOS. This was specifically created for **Chezy Champs** 2022.
 
 Note: We are currenly not developing this project further, as we will be using Flutter to deploy apps to both iOS and Android.
