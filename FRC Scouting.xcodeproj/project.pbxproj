@@ -19,6 +19,7 @@
 		1D85980528DF8E62007D8751 /* TeleopView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D85980428DF8E62007D8751 /* TeleopView.swift */; };
 		1D85980728DF8F7F007D8751 /* PostMatchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D85980628DF8F7F007D8751 /* PostMatchView.swift */; };
 		1D85980928DF9340007D8751 /* ClimberPosition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D85980828DF9340007D8751 /* ClimberPosition.swift */; };
+		1D935A452930856700C13852 /* MatchDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D935A442930856700C13852 /* MatchDetails.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -34,6 +35,7 @@
 		1D85980428DF8E62007D8751 /* TeleopView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeleopView.swift; sourceTree = "<group>"; };
 		1D85980628DF8F7F007D8751 /* PostMatchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostMatchView.swift; sourceTree = "<group>"; };
 		1D85980828DF9340007D8751 /* ClimberPosition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClimberPosition.swift; sourceTree = "<group>"; };
+		1D935A442930856700C13852 /* MatchDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchDetails.swift; sourceTree = "<group>"; };
 		1DFF9D5D28E0AAF300CF1DCB /* FRC-Scouting-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "FRC-Scouting-Info.plist"; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
@@ -71,6 +73,7 @@
 				1DFF9D5D28E0AAF300CF1DCB /* FRC-Scouting-Info.plist */,
 				1D85980128DF8E37007D8751 /* Application */,
 				1D8597FD28DF8A24007D8751 /* ContentView.swift */,
+				1D935A442930856700C13852 /* MatchDetails.swift */,
 				1D2ADD4328DFF52B00C4ACD7 /* GameReadyView.swift */,
 				1D8597EF28DF865B007D8751 /* AutoView.swift */,
 				1D85980428DF8E62007D8751 /* TeleopView.swift */,
@@ -185,6 +188,7 @@
 				1D85980528DF8E62007D8751 /* TeleopView.swift in Sources */,
 				1D85980928DF9340007D8751 /* ClimberPosition.swift in Sources */,
 				1D8597FE28DF8A24007D8751 /* ContentView.swift in Sources */,
+				1D935A452930856700C13852 /* MatchDetails.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

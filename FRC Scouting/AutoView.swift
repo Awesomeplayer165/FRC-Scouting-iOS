@@ -8,9 +8,6 @@
 import SwiftUI
 
 struct AutoView: View {
-    @State private var autoSuccess = 0
-    @State private var autoFailure = 0
-    
     @State private var isTeleopViewPresented = false
     @AppStorage("isGameReadyViewPresented", store: .standard) private var isGameReadyViewPresented = false
     @AppStorage("isAutoViewPresented", store: .standard) private var isAutoViewPresented = false
@@ -25,6 +22,7 @@ struct AutoView: View {
     
     @State private var timer = Timer.publish(every: 16.0, on: .current, in: .common).autoconnect()
     @State private var isFirstTime = true
+    @EnvironmentObject private var matchDetails: MatchDetails
     
     var body: some View {
         VStack {
@@ -38,15 +36,15 @@ struct AutoView: View {
                         
                         Text("Auto Miss")
                             .font(.largeTitle)
-                        Text("\(autoFailure)")
+                        Text("\(matchDetails.autoFailure)")
                             .foregroundStyle(.secondary)
                             .font(.system(size: 50))
                         
                         Spacer()
                         
                         Button("Subtract") {
-                            if autoFailure > 0 {
-                                autoFailure -= 1
+                            if matchDetails.autoFailure > 0 {
+                                matchDetails.autoFailure -= 1
                                 notificationGenerator.notificationOccurred(.warning)
                             } else {
                                 notificationGenerator.notificationOccurred(.error)
@@ -58,7 +56,7 @@ struct AutoView: View {
                     .foregroundColor(.white)
                 }
                 .onTapGesture {
-                    autoFailure += 1
+                    matchDetails.autoFailure += 1
                     mediumImpactGenerator.impactOccurred()
                 }
                 
@@ -71,15 +69,15 @@ struct AutoView: View {
                         
                         Text("Auto Success")
                             .font(.largeTitle)
-                        Text("\(autoSuccess)")
+                        Text("\(matchDetails.autoSuccess)")
                             .foregroundStyle(.secondary)
                             .font(.system(size: 50))
                         
                         Spacer()
                         
                         Button("Subtract") {
-                            if autoSuccess > 0 {
-                                autoSuccess -= 1
+                            if matchDetails.autoSuccess > 0 {
+                                matchDetails.autoSuccess -= 1
                                 notificationGenerator.notificationOccurred(.warning)
                             } else {
                                 notificationGenerator.notificationOccurred(.error)
@@ -91,7 +89,7 @@ struct AutoView: View {
                     .foregroundColor(.white)
                 }
                 .onTapGesture {
-                    autoSuccess += 1
+                    matchDetails.autoSuccess += 1
                     mediumImpactGenerator.impactOccurred()
                 }
             }
@@ -101,7 +99,7 @@ struct AutoView: View {
                 .frame(width: 0, height: 0)
             
             Button(action: {
-                saveAndAdvance()
+                advance()
             }, label: {
                 HStack {
                     Spacer()
@@ -112,21 +110,18 @@ struct AutoView: View {
             .buttonStyle(.borderedProminent)
         }
         .onReceive(timer) { _ in
-            saveAndAdvance()
+            advance()
         }
         .onAppear {
             AppDelegate.setOrientationLock(.landscapeLeft, orientationMask: .landscape)
         }
         .navigationBarBackButtonHidden()
-        .navigationBarTitle("Team: \(MatchDetails.shared.teamNumber)")
+        .navigationBarTitle("Team: \(matchDetails.teamNumber)")
         .navigationViewStyle(.stack)
         
     }
     
-    func saveAndAdvance() {
-        MatchDetails.shared.autoSuccess = autoSuccess
-        MatchDetails.shared.autoFailure = autoFailure
-        
+    func advance() {
         heavyImpactGenerator .impactOccurred()
         isTeleopViewPresented.toggle()
         
@@ -137,9 +132,7 @@ struct AutoView: View {
 struct AutoView_Previews: PreviewProvider {
     static var previews: some View {
         AutoView()
-            .onAppear {
-                MatchDetails.shared.teamNumber = "8033"
-            }
+            .environmentObject(MatchDetails())
     }
 }
 

@@ -9,12 +9,12 @@ import SwiftUI
 import SafariServices
 
 struct SafariView: UIViewControllerRepresentable {
-    public private(set) var url:        URL
+    public private(set) var url: URL
     
     private let sfSafariViewController: SFSafariViewController
     private let coordinator: Coordinator
     
-    @Binding var safariViewControllerDidDismiss:  Bool
+    @Binding var safariViewControllerDidDismiss: Bool
 
     init(url: URL, safariViewControllerDidDismiss: Binding<Bool>) {
         self.url = url

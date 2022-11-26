@@ -38,9 +38,6 @@ struct GameReadyView: View {
             isAutoViewPresented = false
             AppDelegate.setOrientationLock(.landscapeLeft, orientationMask: .landscape)
         }
-//        .onDisappear {
-//            AppDelegate.setOrientationLock(.portrait, orientationMask: .portrait)
-//        }
     }
 }
 

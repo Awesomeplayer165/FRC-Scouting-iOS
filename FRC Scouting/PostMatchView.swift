@@ -9,20 +9,18 @@ import SwiftUI
 import UniformTypeIdentifiers
 
 struct PostMatchView: View {
-    @State private var selectedClimberPosition = ClimberPosition.noClimb
-    @State private var notes = ""
-    
     @State private var isSafariViewControllerPresented = false
     
     @AppStorage("isGameReadyViewPresented", store: .standard) private var isGameReadyViewPresented = false
     @AppStorage("isAutoViewPresented", store: .standard) private var isAutoViewPresented = false
     
     @Environment(\.presentationMode) var presentationMode
+    @EnvironmentObject private var matchDetails: MatchDetails
     
     var body: some View {
         Form {
             Section {
-                Picker(selection: $selectedClimberPosition, label: Text("Climber Position")) {
+                Picker(selection: $matchDetails.climberPosition, label: Text("Climber Position")) {
                     Text(ClimberPosition.noClimb  .localizedDescription).tag(ClimberPosition.noClimb)
                     Text(ClimberPosition.low      .localizedDescription).tag(ClimberPosition.low)
                     Text(ClimberPosition.mid      .localizedDescription).tag(ClimberPosition.mid)
@@ -35,57 +33,57 @@ struct PostMatchView: View {
                 HStack {
                     Text("Match Number")
                     Spacer()
-                    Text(MatchDetails.shared.matchNumber)
-                    ClipboardButton(textToCopy: MatchDetails.shared.matchNumber)
+                    Text(matchDetails.matchNumber)
+                    ClipboardButton(textToCopy: matchDetails.matchNumber)
                 }
                 HStack {
-                    Text("Team Number \(MatchDetails.shared.teamNumber)")
+                    Text("Team Number \(matchDetails.teamNumber)")
                     Spacer()
-                    Text(MatchDetails.shared.teamNumber)
-                    ClipboardButton(textToCopy: MatchDetails.shared.teamNumber)
+                    Text(matchDetails.teamNumber)
+                    ClipboardButton(textToCopy: matchDetails.teamNumber)
                 }
                 
                 HStack {
                     Text("Name")
                     Spacer()
-                    Text(MatchDetails.shared.name)
-                    ClipboardButton(textToCopy: MatchDetails.shared.name)
+                    Text(matchDetails.name)
+                    ClipboardButton(textToCopy: matchDetails.name)
                 }
-                    
+                
                 HStack {
                     Text("Auto Success")
                     Spacer()
-                    Text("\(MatchDetails.shared.autoSuccess)")
-                    ClipboardButton(textToCopy: "\(MatchDetails.shared.autoSuccess)")
+                    Text("\(matchDetails.autoSuccess)")
+                    ClipboardButton(textToCopy: "\(matchDetails.autoSuccess)")
                 }
                 
                 HStack {
                     Text("Auto Failure")
                     Spacer()
-                    Text("\(MatchDetails.shared.autoFailure)")
-                    ClipboardButton(textToCopy: "\(MatchDetails.shared.autoFailure)")
+                    Text("\(matchDetails.autoFailure)")
+                    ClipboardButton(textToCopy: "\(matchDetails.autoFailure)")
                 }
-                    
+                
                 HStack {
                     Text("Teleop Success")
                     Spacer()
-                    Text("\(MatchDetails.shared.teleopSuccess)")
-                    ClipboardButton(textToCopy: "\(MatchDetails.shared.matchNumber)")
+                    Text("\(matchDetails.teleopSuccess)")
+                    ClipboardButton(textToCopy: "\(matchDetails.matchNumber)")
                 }
                 
                 HStack {
                     Text("Teleop Failure")
                     Spacer()
-                    Text("\(MatchDetails.shared.teleopFailure)")
-                    ClipboardButton(textToCopy: "\(MatchDetails.shared.teleopFailure)")
+                    Text("\(matchDetails.teleopFailure)")
+                    ClipboardButton(textToCopy: "\(matchDetails.teleopFailure)")
                 }
             }
             
             Section {
                 if #available(iOS 16, *) {
-                    TextField("Notes", text: $notes, axis: .vertical)
+                    TextField("Notes", text: $matchDetails.notes, axis: .vertical)
                 } else {
-                    TextField("Notes", text: $notes)
+                    TextField("Notes", text: $matchDetails.notes)
                 }
             }
             
@@ -111,20 +109,22 @@ struct PostMatchView: View {
             }
         }
     }
-    
-    func createURL() -> URL {
-        MatchDetails.shared.notes = notes
         
-        return URL(string: "https://docs.google.com/forms/d/e/1FAIpQLSfZSne2CzACrxsFgdT-37J6PylON7bIMe0mcACFKxDr9yv56A/viewform?usp=pp_url&entry.2125038000=\(MatchDetails.shared.teamNumber.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed)!)&entry.685765925=\(MatchDetails.shared.matchNumber.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed)!)&entry.2138351230=\(MatchDetails.shared.name.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed)!)&entry.307342493=\(MatchDetails.shared.autoSuccess)&entry.325851281=\(MatchDetails.shared.autoFailure)&entry.585797499=\(MatchDetails.shared.teleopSuccess)&entry.1258824098=\(MatchDetails.shared.teleopFailure)&entry.1181924470=\(selectedClimberPosition.formDescription)&entry.1505471002=\(MatchDetails.shared.notes.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed)!)&usp=embed_facebook")!
+        func createURL() -> URL {
+            return URL(string: "https://google.com")!
+            //        if
+            //            let
+            
+            //        return URL(string: "https://docs.google.com/forms/d/e/1FAIpQLSfZSne2CzACrxsFgdT-37J6PylON7bIMe0mcACFKxDr9yv56A/viewform?usp=pp_url&entry.2125038000=\(matchDetails.teamNumber)&entry.685765925=\(matchDetails.matchNumber)&entry.2138351230=\(name)&entry.307342493=\(matchDetails.autoSuccess)&entry.325851281=\(matchDetails.autoFailure)&entry.585797499=\(matchDetails.teleopSuccess)&entry.1258824098=\(matchDetails.teleopFailure)&entry.1181924470=\(selectedClimberPosition.formDescription)&entry.1505471002=\(MatchDetails.shared.notes.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed)!)&usp=embed_facebook")!
+            
+        }
     }
-}
+
 
 struct PostMatchView_Previews: PreviewProvider {
     static var previews: some View {
         PostMatchView()
-            .onAppear {
-                MatchDetails.exampleData()
-            }
+            .environmentObject(MatchDetails())
     }
 }
 

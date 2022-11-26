@@ -9,12 +9,10 @@ import SwiftUI
 import SPIndicator
 
 struct TeleopView: View {
-    @State private var teleopSuccess = 0
-    @State private var teleopFailure = 0
-    
     @State private var isFinishViewPresented = false
     
     @Environment(\.presentationMode) var presentationMode
+    @EnvironmentObject private var matchDetails: MatchDetails
     
     private let notificationGenerator = UINotificationFeedbackGenerator()
     private var mediumImpactGenerator = UIImpactFeedbackGenerator(style: .medium)
@@ -34,15 +32,15 @@ struct TeleopView: View {
                         
                         Text("Teleop Miss")
                             .font(.largeTitle)
-                        Text("\(teleopFailure)")
+                        Text("\(matchDetails.teleopFailure)")
                             .foregroundStyle(.secondary)
                             .font(.system(size: 50))
                         
                         Spacer()
                         
                         Button("Subtract") {
-                            if teleopFailure > 0 {
-                                teleopFailure -= 1
+                            if matchDetails.teleopFailure > 0 {
+                                matchDetails.teleopFailure -= 1
                                 notificationGenerator.notificationOccurred(.warning)
                             } else {
                                 notificationGenerator.notificationOccurred(.error)
@@ -54,7 +52,7 @@ struct TeleopView: View {
                     .foregroundColor(.white)
                 }
                 .onTapGesture {
-                    teleopFailure += 1
+                    matchDetails.teleopFailure += 1
                     mediumImpactGenerator.impactOccurred()
                 }
                 
@@ -67,15 +65,15 @@ struct TeleopView: View {
                         
                         Text("Teleop Success")
                             .font(.largeTitle)
-                        Text("\(teleopSuccess)")
+                        Text("\(matchDetails.teleopSuccess)")
                             .foregroundStyle(.secondary)
                             .font(.system(size: 50))
                         
                         Spacer()
                         
                         Button("Subtract") {
-                            if teleopSuccess > 0 {
-                                teleopSuccess -= 1
+                            if matchDetails.teleopSuccess > 0 {
+                                matchDetails.teleopSuccess -= 1
                                 notificationGenerator.notificationOccurred(.warning)
                             } else {
                                 notificationGenerator.notificationOccurred(.error)
@@ -87,35 +85,32 @@ struct TeleopView: View {
                     .foregroundColor(.white)
                 }
                 .onTapGesture {
-                    teleopSuccess += 1
+                    matchDetails.teleopSuccess += 1
                     mediumImpactGenerator.impactOccurred()
                 }
             }
             .ignoresSafeArea()
             
             Button(action: {
-                MatchDetails.shared.teleopSuccess = teleopSuccess
-                MatchDetails.shared.teleopFailure = teleopFailure
-                
                 isFinishViewPresented.toggle()
                 heavyImpactGenerator.impactOccurred()
-            }, label: {
+            }) {
                 HStack {
                     Spacer()
                     Text("Finish")
                     Spacer()
                 }
-            })
+            }
             .buttonStyle(.borderedProminent)
             
-            NavigationLink(destination: PostMatchView(), isActive: $isFinishViewPresented) { EmptyView() }
+            NavigationLink(destination: PostMatchView(), isActive: $isFinishViewPresented) { }
                 .frame(width: 0, height: 0)
         }
         .onAppear {
             AppDelegate.setOrientationLock(.landscapeLeft, orientationMask: .landscape)
         }
         .navigationBarBackButtonHidden()
-        .navigationBarTitle("Team: \(MatchDetails.shared.teamNumber)")
+        .navigationBarTitle("Team: \(matchDetails.teamNumber)")
         .navigationViewStyle(.stack)
     }
 }
@@ -124,8 +119,6 @@ struct TeleopView: View {
 struct TeleopView_Previews: PreviewProvider {
     static var previews: some View {
         TeleopView()
-            .onAppear {
-                MatchDetails.shared.teamNumber = "8033"
-            }
+            .environmentObject(MatchDetails(teamNumber: "8033"))
     }
 }
